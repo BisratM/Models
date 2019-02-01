@@ -13,9 +13,11 @@ class DaGMM(nn.Module):
         super(DaGMM, self).__init__()
 
         layers = []
-        layers += [nn.Linear(300,200)]
+        layers += [nn.Linear(118,60)]
         layers += [nn.Tanh()]        
-        layers += [nn.Linear(200,10)]
+        layers += [nn.Linear(60,30)]
+        layers += [nn.Tanh()]        
+        layers += [nn.Linear(30,10)]
         layers += [nn.Tanh()]        
         layers += [nn.Linear(10,1)]
 
@@ -25,9 +27,11 @@ class DaGMM(nn.Module):
         layers = []
         layers += [nn.Linear(1,10)]
         layers += [nn.Tanh()]        
-        layers += [nn.Linear(10,200)]
+        layers += [nn.Linear(10,30)]
         layers += [nn.Tanh()]        
-        layers += [nn.Linear(200,300)]
+        layers += [nn.Linear(30,60)]
+        layers += [nn.Tanh()]        
+        layers += [nn.Linear(60,118)]
 
         self.decoder = nn.Sequential(*layers)
 
@@ -58,6 +62,8 @@ class DaGMM(nn.Module):
         rec_euclidean = self.relative_euclidean_distance(x, dec)
 
         z = torch.cat([enc, rec_euclidean.unsqueeze(-1), rec_cosine.unsqueeze(-1)], dim=1)
+        # print("rec_cosine shape: ", rec_cosine.shape)
+        # print("z shape: ", z.shape)
 
         gamma = self.estimation(z)
 
