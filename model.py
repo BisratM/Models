@@ -61,11 +61,11 @@ class DaGMM(nn.Module):
         rec_cosine = F.cosine_similarity(x, dec, dim=1)
         rec_euclidean = self.relative_euclidean_distance(x, dec)
 
-        z = torch.cat([enc, rec_euclidean.unsqueeze(-1), rec_cosine.unsqueeze(-1)], dim=1)
+        z = torch.cat([enc, rec_euclidean.unsqueeze(-1), rec_cosine.unsqueeze(-1)], dim=1) # shape is 60 x 3
         # print("rec_cosine shape: ", rec_cosine.shape)
         # print("z shape: ", z.shape)
 
-        gamma = self.estimation(z)
+        gamma = self.estimation(z) # shape is 60 x 2
 
         return enc, dec, z, gamma
     # There seems to be something strange here with the operations 
